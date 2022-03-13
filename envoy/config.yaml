@@ -1,0 +1,50 @@
+admin:
+  # access_log_path: "/var/log/admin_access.log"
+  access_log_path: "/dev/null"
+  address:
+    socket_address:
+      address: "127.0.0.1"
+      port_value: 8001
+static_resources:
+  listeners:
+    -
+      name: "price-server-svc-http-listener"
+      address:
+        socket_address:
+          address: "0.0.0.0"
+          port_value: 8000
+      filter_chains:
+        - filters:
+          -
+            name: "envoy.http_connection_manager"
+            config:
+              stat_prefix: "ingress"
+              codec_type: "AUTO"
+              route_config:
+                name: "price-server-svc-http-route"
+                virtual_hosts:
+                  -
+                    name: "price-server-svc-http-route"
+                    domains:
+                      - "*"
+                    rou
+                      -
+                        match:
+                          prefix: "/"
+                        route:
+                          cluster: "price-server"
+              http_filters:
+                -
+                  name: "envoy.router"
+
+  clusters:
+      -
+        name: "price-server"
+        connect_timeout: "0.25s"
+        type: "strict_dns"
+        lb_policy: "ROUND_ROBIN"
+        hosts:
+          -
+            socket_address:
+              address: "price-server"
+              port_value: 8000

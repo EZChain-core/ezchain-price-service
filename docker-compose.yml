@@ -1,0 +1,63 @@
+version: "3"
+
+services:
+  etcd:
+    restart: always
+    container_name: etcd
+    image: bitnami/etcd
+    ports:
+      - "2379:2379"
+      - "2380:2380"
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+  redis:
+    restart: always
+    container_name: redis
+    image: bitnami/redis
+    ports:
+      - "6379:6379"
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+  price_server:
+    restart: always
+    container_name: price_service
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - ETCD_URI=etcd:2379
+      - REDIS_URI=redis://redis:6379/0
+      - MICRO_SERVER_ADDRESS=:8000
+      - MICRO_REGISTRY=etcdv3
+      - MICRO_REGISTRY_ADDRESS=etcd:2379
+#      - USE_AUTH=
+#      - SECRET=
+#      - AUTH_END_POINT_URI
+#      - STORAGE_ENDPOINT_URI
+    links:
+      - redis:redis
+      - etcd:etcd
+    depends_on:
+      - redis
+      - etcd
+  fireworq:
+    restart: always
+    container_name: fireworq
+    image: fireworq/fireworq
+    ports:
+      - "8080:8080"
+    environment:
+      - FIREWORQ_MYSQL_DSN=root:password@tcp(10.5.70.21:3307)/jobs?charset=utf8mb4
+      - FIREWORQ_QUEUE_DEFAULT=default
+      - FIREWORQ_QUEUE_DEFAULT_POLLING_INTERVAL=500
+      - FIREWORQ_QUEUE_DEFAULT_MAX_WORKERS=20
+  fireworq_ui:
+    restart: always
+    container_name: fireworq_ui
+    image: fireworq/fireworqonsole
+    ports:
+      - "8888:8888"
+    links:
+      - fireworq:fireworq
+    depends_on:
+      - fireworq

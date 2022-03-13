@@ -1,0 +1,2 @@
+Example: "test"
+Plural: Hi {{plural (tr "Example") .count }}
