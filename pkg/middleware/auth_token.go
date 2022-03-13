@@ -13,8 +13,8 @@ import (
 
 func AuthenticationTokenRequired(appConfig *config.AppConfig) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		xIAMToken := c.GetHeader("x-iam-token")
-		if xIAMToken == "" || xIAMToken != appConfig.IAMToken {
+		secretToken := c.GetHeader("x-secret-token")
+		if secretToken == "" || secretToken != appConfig.SecretToken {
 			logger.Debug("Unauthorized, iam token is missing or invalid")
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"error_code": http.StatusUnauthorized,

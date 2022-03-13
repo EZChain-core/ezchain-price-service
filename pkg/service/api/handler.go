@@ -3,7 +3,6 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 	//d "github.com/EZChain-core/price-service/pkg/domain"
-	"github.com/satori/go.uuid"
 	uc "github.com/EZChain-core/price-service/pkg/service/usecase"
 	"net/http"
 	"github.com/EZChain-core/price-service/config"

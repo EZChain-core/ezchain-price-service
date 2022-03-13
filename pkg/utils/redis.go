@@ -7,7 +7,7 @@ import (
 	"log"
 	"context"
 	"github.com/go-redis/redis/v8"
-	"git.paas.vn/iam/gray-titanic/config"
+	"github.com/EZChain-core/price-service/config"
 	apmgoredis "go.elastic.co/apm/module/apmgoredisv8"
 )
 

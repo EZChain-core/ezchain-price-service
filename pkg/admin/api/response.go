@@ -1,8 +1,7 @@
 package api
 
 import (
-	"github.com/satori/go.uuid"
-	d "github.com/EZChain-core/price-service/pkg/domain"
+	//d "github.com/EZChain-core/price-service/pkg/domain"
 )
 
 type MetadataResponse struct {

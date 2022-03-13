@@ -3,8 +3,6 @@ package redis
 import (
 	"context"
 	//"log"
-	//d "git.paas.vnx/iam/gray-titanic/pkg/domain"
-	//"github.com/satori/go.uuid"
 	"github.com/EZChain-core/price-service/pkg/utils"
 	"github.com/EZChain-core/price-service/config"
 )

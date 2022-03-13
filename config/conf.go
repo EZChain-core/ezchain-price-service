@@ -33,6 +33,7 @@ type AppConfig struct {
 	WorkerProcessURI string `mapstructure:"worker_process_uri"`
 	FeatureFlagServerURI string `mapstructure:"feature_flag_server_uri"`
 	FeatureFlagSecret string `mapstructure:"feature_flag_secret"`
+	SecretToken string `mapstructure:"secret_token"`
 }
 
 var (
@@ -82,6 +83,7 @@ func InitConfig() *AppConfig {
 				WorkerProcessURI: getEnv("WORKER_PROCESS_URI", "").(string),
 				FeatureFlagSecret: getEnv("FEATURE_FLAG_SECRET", "").(string),
 				FeatureFlagServerURI: getEnv("FEATURE_FLAG_SERVER_URI", "").(string),
+				SecretToken: getEnv("SECRET_TOKEN", "").(string),
 			}
 		},
 	)

@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	u "github.com/EZChain-core/price-service/pkg/service/usecase"
 	"github.com/EZChain-core/price-service/config"
-	"github.com/EZChain-core/price-service/pkg/middleware"
+	//"github.com/EZChain-core/price-service/pkg/middleware"
 	"github.com/EZChain-core/price-service/pkg/utils"
 )
 
