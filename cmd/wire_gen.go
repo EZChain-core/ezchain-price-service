@@ -10,16 +10,16 @@ import (
 	"github.com/EZChain-core/price-service/config"
 	redis2 "github.com/EZChain-core/price-service/pkg/admin/repository/redis"
 	usecase2 "github.com/EZChain-core/price-service/pkg/admin/usecase"
-	"github.com/EZChain-core/price-service/pkg/service/repository/redis"
 	"github.com/EZChain-core/price-service/pkg/service/usecase"
+	"github.com/EZChain-core/price-service/pkg/service/repository/mongo"
 )
 
 // Injectors from wire.go:
 
 func initServiceUseCase(ctx context.Context) *usecase.ServiceUseCase {
 	appConfig := ProvideConfig()
-	serviceRedisStorage := redis.NewServiceRedisStorage(ctx, appConfig)
-	serviceUseCase := usecase.NewServiceUseCase(serviceRedisStorage)
+	serviceMongoStorage := mongo.NewServiceMongoStorage(ctx, appConfig)
+	serviceUseCase := usecase.NewServiceUseCase(serviceMongoStorage)
 	return serviceUseCase
 }
 

@@ -19,7 +19,8 @@ type AppConfig struct {
 	ServerAddr    string `mapstructure:"server_addr"`
 	ServerPort   int `mapstructure:"server_port"`
 	SentryDSN     string `mapstructure:"sentry_dsn"`
-	RedisURI       string `mapstructure:"redis_url"`
+	RedisURI       string `mapstructure:"redis_uri"`
+	MongoURI	string `mapstructure:"mongo_uri"`
 	UseAuth bool `mapstructure:"use_auth"`
 	Secret string `mapstructure:"secret"`
 	Salt string `mapstructure:"salt"`
@@ -69,6 +70,7 @@ func InitConfig() *AppConfig {
 				Domain: getEnv("DOMAIN", "http://127.0.0.1:8000").(string),
 				ServerAddr: getEnv("SERVER_ADDR", "0.0.0.0").(string),
 				RedisURI: getEnv("REDIS_URI", "").(string),
+				MongoURI: getEnv("MONGO_URI", "mongodb://root:password@127.0.0.1:27017").(string),
 				SentryDSN: getEnv("SENTRY_DSN", "").(string),
 				ServerPort: getEnv("SERVER_PORT", 8000).(int),
 				UseAuth: getEnv("USE_AUTH", true).(bool),

@@ -100,6 +100,9 @@ func NewServer(port int, mode GinServerMode, config *config.AppConfig) GinServer
 	cache := utils.Serve("0.0.0.0:9000", "test", "")
 	// init instance for feature flag and running
 
+	//init mongodb
+	_ = utils.NewMongoStorage(context, config)
+
 	featureflag, err := utils.NewFeatureClient(config)
 	if err == nil {
 		featureflag.Start()

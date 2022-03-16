@@ -60,3 +60,4 @@ scripts/.build_image_gopath/
 .idea
 
 vendor
+.idea/vcs.xml
