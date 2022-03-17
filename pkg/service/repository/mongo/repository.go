@@ -49,7 +49,7 @@ func (m *ServiceMongoStorage) ListTokenPrice(optionDatas map[string]interface{})
 		symbols := strings.Split(optionDatas["symbols"].(string), ",")
 		allowQuery = true
 		for _, symbol := range symbols {
-			filter = append(filter, bson.M{"symbol": symbol})
+			filter = append(filter, bson.M{"symbol": strings.ToLower(symbol)})
 		}
 	}
 
@@ -71,6 +71,12 @@ func (m *ServiceMongoStorage) ListTokenPrice(optionDatas map[string]interface{})
 	if allowQuery == true {
 		bData["$or"] = filter
 	}
+
+	if optionDatas["is_native_token"].(*bool) != nil {
+		native := optionDatas["is_native_token"].(*bool)
+		bData["is_native_token"] = &native
+	}
+
 	err := mgm.Coll(&Token{}).SimpleFind(&result, bData, pagination)
 	if err != nil {
 		return nil, err
@@ -83,13 +89,19 @@ func (m *ServiceMongoStorage) GetTokenPrice(optionDatas map[string]interface{}) 
 	token := &Token{}
 	bData := bson.M{}
 	allowQuery := false
+	if optionDatas["is_native_token"].(*bool) != nil{
+		native := optionDatas["is_native_token"].(*bool)
+		bData["is_native_token"] = &native
+		allowQuery = true
+	}
+
 	if optionDatas["token_name"] != nil && optionDatas["token_name"].(string) != "" {
 		bData["token"] = optionDatas["token_name"].(string)
 		allowQuery = true
 	}
 
 	if optionDatas["symbol"] != nil && optionDatas["symbol"].(string) != "" {
-		bData["symbol"] = optionDatas["symbol"].(string)
+		bData["symbol"] = strings.ToLower(optionDatas["symbol"].(string))
 		allowQuery = true
 	}
 

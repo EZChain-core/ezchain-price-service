@@ -16,6 +16,7 @@ type Token struct {
 	Name                         string      `json:"name" bson:"name"`
 	Chain 					     string      `json:"chain" bson:"chain"`
 	Contract 					 string      `json:"contract" bson:"contract"`
+	IsNativeToken				 bool        `json:"is_native_token" bson:"is_native_token"`
 	Image                        string      `json:"image" bson:"image"`
 	CurrentPrice                 float64     `json:"current_price" bson:"current_price,truncate"`
 	MarketCap                    int64       `json:"market_cap" bson:"market_cap,truncate"`

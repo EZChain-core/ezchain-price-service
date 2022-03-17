@@ -56,7 +56,7 @@ func (s *ServiceHandler) List(c *gin.Context) {
 				Success: false,
 				ErrorCode: http.StatusExpectationFailed,
 				Message: "Cannot list tokens",
-				Data: &EmptyResponse{},
+				Data: make([]EmptyResponse, 0),
 			},
 		)
 		return
@@ -66,14 +66,14 @@ func (s *ServiceHandler) List(c *gin.Context) {
 	mapData := structs.Map(tokenListQuery)
 	result, err := s.useCase.ListToken(c, mapData)
 
-	if err != nil {
+	if len(result) == 0 || err != nil {
 		c.JSON(
-			http.StatusExpectationFailed,
+			http.StatusNotFound,
 			&Response{
 				Success: false,
-				ErrorCode: http.StatusInternalServerError,
-				Message: "Cannot list price",
-				Data: &EmptyResponse{},
+				ErrorCode: http.StatusNotFound,
+				Message: "Cannot found token for prices",
+				Data: make([]EmptyResponse, 0),
 			},
 		)
 		return
@@ -103,7 +103,7 @@ func (s *ServiceHandler) GetToken(c *gin.Context) {
 			&Response{
 				Success: false,
 				ErrorCode: http.StatusExpectationFailed,
-				Message: "Cannot get tokens",
+				Message: "Cannot get token",
 				Data: &EmptyResponse{},
 			},
 		)
@@ -119,11 +119,11 @@ func (s *ServiceHandler) GetToken(c *gin.Context) {
 		logger.Error(err)
 		//sentry.CaptureException(err)
 		c.JSON(
-			http.StatusExpectationFailed,
+			http.StatusNotFound,
 			&Response{
 				Success: false,
-				ErrorCode: http.StatusExpectationFailed,
-				Message: "Cannot get token",
+				ErrorCode: http.StatusNotFound,
+				Message: "Token not found",
 				Data: &EmptyResponse{},
 			},
 		)
