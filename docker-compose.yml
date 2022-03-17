@@ -1,14 +1,6 @@
 version: "3"
 
 services:
-  redis:
-    restart: always
-    container_name: redis
-    image: bitnami/redis
-    ports:
-      - "127.0.0.1:6379:6379"
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
   price_server:
     restart: always
     container_name: price_service
@@ -16,28 +8,4 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - ETCD_URI=etcd:2379
-      - REDIS_URI=redis://redis:6379/0
-      - MICRO_SERVER_ADDRESS=:8000
-      - MICRO_REGISTRY=etcdv3
-      - MICRO_REGISTRY_ADDRESS=etcd:2379
-#      - USE_AUTH=
-#      - SECRET=
-#      - AUTH_END_POINT_URI
-#      - STORAGE_ENDPOINT_URI
-    links:
-      - redis:redis
-      - etcd:etcd
-    depends_on:
-      - redis
-      - mongodb
-  mongodb:
-    image: mongo:5.0
-    ports:
-      - "127.0.0.1:27017:27017"
-#    volumes:
-#      - ~/apps/mongo:/data/db
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=password
-      - MONGO_INITDB_DATABASE-coingecko
+      MONGO_URI: ${MONGO_URI}
