@@ -1,4 +1,4 @@
-FROM golang:1.14.2 AS build_base
+FROM golang:1.16 AS build_base
 LABEL maintainer="quandc <quandc@vccloud.vn>"
 
 RUN apt-get update && apt-get install -y git pkg-config
@@ -21,12 +21,12 @@ FROM build_go AS server_builder
 ENV GO111MODULE=on
 
 COPY . .
-RUN CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -gcflags="-N -l" -o /bin/gray_titanic ./cmd/*
+RUN CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -gcflags="-N -l" -o /bin/service ./cmd/*
 EXPOSE 8080
-CMD ["/bin/gray_titanic"]
+CMD ["/bin/service"]
 
 # Stage 4
-FROM golang:1.14.2 AS gray_titanic
+FROM golang:1.16 AS service
 
 ENV TZ 'Asia/Ho_Chi_Minh'
 RUN echo $TZ > /etc/timezone && \
@@ -36,11 +36,11 @@ RUN echo $TZ > /etc/timezone && \
     dpkg-reconfigure -f noninteractive tzdata && \
     apt-get clean
 
-COPY --from=server_builder /bin/gray_titanic /bin/gray_titanic
+COPY --from=server_builder /bin/service /bin/service
 # copy locales translate to go path to load message
-COPY --from=server_builder $GOPATH/src/git.paas.vn/iam/gray_titanic/locales /go/locales
+#COPY --from=server_builder $GOPATH/src/github.com/EZChain-core/price-service/locales /go/locales
 
-CMD ["/bin/gray_titanic"]
+CMD ["/bin/service"]
 
 
 
