@@ -30,4 +30,4 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
-          script: docker-compose build && docker-compose up -d --force-recreate
+          script: cd /opt/price-service && docker-compose build && docker-compose up -d --force-recreate
