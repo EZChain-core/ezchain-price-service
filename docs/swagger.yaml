@@ -1,0 +1,24 @@
+definitions:
+  http.Header:
+    additionalProperties:
+      items:
+        type: string
+      type: array
+    type: object
+info:
+  contact: {}
+  license: {}
+paths:
+  /v1/headers:
+    get:
+      description: use this to inspect the headers set by the portal and received
+        by the service
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.Header'
+      summary: returns the HTTP headers
+swagger: "2.0"

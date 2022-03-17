@@ -16,6 +16,8 @@ import (
 	//sentrygin "github.com/getsentry/sentry-go/gin"
 	//"github.com/EZChain-core/price-service/logger"
 	"go.elastic.co/apm/module/apmgin"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type GinServerMode int
@@ -40,7 +42,8 @@ func NewServer(port int, mode GinServerMode, config *config.AppConfig) GinServer
 
 	s.Router = gin.New()
 
-
+	url := ginSwagger.URL("http://127.0.0.1:8000/swagger/doc.json")
+	s.Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler, url))
 	// inject sentry for gin
 	//if err := sentry.Init(sentry.ClientOptions{
 	//	Dsn: config.SentryDSN,
@@ -59,6 +62,7 @@ func NewServer(port int, mode GinServerMode, config *config.AppConfig) GinServer
 	//}
 
 	//defer sentry.Flush(2 * time.Second)
+	// openapi document
 
 	// Once it's done, you can attach the handler as one of your middleware
 	//s.Router.Use(sentrygin.New(sentrygin.Options{}))

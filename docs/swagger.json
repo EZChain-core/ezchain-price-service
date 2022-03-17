@@ -1,0 +1,37 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {},
+        "license": {}
+    },
+    "paths": {
+        "/v1/headers": {
+            "get": {
+                "description": "use this to inspect the headers set by the portal and received by the service",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "returns the HTTP headers",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/http.Header"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "http.Header": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

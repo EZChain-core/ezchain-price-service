@@ -2,11 +2,14 @@ package mongo
 
 import (
 	"context"
+	"strings"
+
 	//"log"
 	"github.com/EZChain-core/price-service/pkg/utils"
 	"github.com/EZChain-core/price-service/config"
 	"github.com/kamva/mgm/v3"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/options"
 
 )
 
@@ -22,12 +25,89 @@ func NewServiceMongoStorage(ctx context.Context, appConfig *config.AppConfig) *S
 	}
 	return nil
 }
-
-func (m *ServiceMongoStorage) GetListTokenPrice() []Token{
+func (m *ServiceMongoStorage) ListTokenPrice(optionDatas map[string]interface{}) ([]Token, error) {
 	result := []Token{}
-	err := mgm.Coll(&Token{}).SimpleFind(&result, bson.M{})
-	if err != nil {
-		return nil
+	bData := bson.M{}
+	filter := []bson.M{}
+	allowQuery := false
+	limit := optionDatas["limit"].(int64)
+	skip := optionDatas["offset"].(int64)
+	pagination := &options.FindOptions{
+		Limit: &limit,
+		Skip:  &skip,
 	}
-	return result
+	if optionDatas["token_names"] != nil && optionDatas["token_names"].(string) != "" {
+		token_names := strings.Split(optionDatas["token_names"].(string), ",")
+		allowQuery = true
+		for _, token := range token_names {
+			filter = append(filter, bson.M{"name": token})
+		}
+
+	}
+
+	if optionDatas["symbols"] != nil && optionDatas["symbols"].(string) != "" {
+		symbols := strings.Split(optionDatas["symbols"].(string), ",")
+		allowQuery = true
+		for _, symbol := range symbols {
+			filter = append(filter, bson.M{"symbol": symbol})
+		}
+	}
+
+	if optionDatas["contracts"] != nil && optionDatas["contracts"].(string) != "" {
+		contracts := strings.Split(optionDatas["contracts"].(string), ",")
+		allowQuery = true
+		for _, contract := range contracts {
+			filter = append(filter, bson.M{"contract": contract})
+		}
+	}
+
+	if optionDatas["chains"] != nil && optionDatas["chains"].(string) != "" {
+		chains := strings.Split(optionDatas["chains"].(string), ",")
+		allowQuery = true
+		for _, chain := range chains {
+			filter = append(filter, bson.M{"chain": chain})
+		}
+	}
+	if allowQuery == true {
+		bData["$or"] = filter
+	}
+	err := mgm.Coll(&Token{}).SimpleFind(&result, bData, pagination)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+func (m *ServiceMongoStorage) GetTokenPrice(optionDatas map[string]interface{}) (*Token, error) {
+	ctx := mgm.Ctx()
+	token := &Token{}
+	bData := bson.M{}
+	allowQuery := false
+	if optionDatas["token_name"] != nil && optionDatas["token_name"].(string) != "" {
+		bData["token"] = optionDatas["token_name"].(string)
+		allowQuery = true
+	}
+
+	if optionDatas["symbol"] != nil && optionDatas["symbol"].(string) != "" {
+		bData["symbol"] = optionDatas["symbol"].(string)
+		allowQuery = true
+	}
+
+	if optionDatas["contract"] != nil && optionDatas["contract"].(string) != "" {
+		bData["contract"] = optionDatas["contract"].(string)
+		allowQuery = true
+	}
+
+	if optionDatas["chain"] != nil && optionDatas["chain"].(string) != "" {
+		bData["chain"] = optionDatas["chain"].(string)
+		allowQuery = true
+	}
+	if allowQuery == false {
+		return token, nil
+	}
+	err := mgm.Coll(token).FirstWithCtx(ctx, bData, token)
+	if err != nil {
+		return nil, err
+	}
+	return token, nil
 }

@@ -17,7 +17,18 @@ func NewServiceUseCase(serviceRepo *rp.ServiceMongoStorage) *ServiceUseCase {
 	}
 }
 
-func (s *ServiceUseCase) List(ctx context.Context) ([]rp.Token, error) {
-	result := s.ServiceRepo.GetListTokenPrice()
+func (s *ServiceUseCase) ListToken(ctx context.Context, options map[string]interface{}) ([]rp.Token, error) {
+	result, err := s.ServiceRepo.ListTokenPrice(options)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+func (s *ServiceUseCase) GetToken(ctx context.Context, options map[string]interface{}) (*rp.Token, error) {
+	result, err := s.ServiceRepo.GetTokenPrice(options)
+	if err != nil {
+		return nil, err
+	}
 	return result, nil
 }

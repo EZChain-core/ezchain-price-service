@@ -12,6 +12,7 @@ func RegisterHTTPEndpoints(router *gin.Engine, uc u.ServiceUseCase, config *conf
 	h := NewServiceHandler(uc, config, cache, i18n, featureflag)
 	api := router.Group("/v1")
 	{
-		api.GET("/services", h.List)
+		api.GET("/service/tokens", h.List)
+		api.GET("/service/token", h.GetToken)
 	}
 }

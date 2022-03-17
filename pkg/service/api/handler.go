@@ -1,12 +1,14 @@
 package api
 
 import (
-	//"fmt"
+	"net/http"
 	"github.com/gin-gonic/gin"
 	//"log"
 	//d "github.com/EZChain-core/price-service/pkg/domain"
 	uc "github.com/EZChain-core/price-service/pkg/service/usecase"
-	"net/http"
+	"github.com/fatih/structs"
+	"github.com/creasty/defaults"
+	"github.com/EZChain-core/price-service/logger"
 	"github.com/EZChain-core/price-service/config"
 	"github.com/EZChain-core/price-service/pkg/utils"
 	//gecko "github.com/superoo7/go-gecko/v3"
@@ -36,9 +38,33 @@ func NewServiceHandler(useCase uc.ServiceUseCase, config *config.AppConfig, cach
 	}
 }
 
+// Headers godoc
+// @Summary returns the HTTP headers
+// @Description use this to inspect the headers set by the portal and received by the service
+// @Produce json
+// @Success 200 {object} http.Header
+// @Router /v1/headers [get]
 func (s *ServiceHandler) List(c *gin.Context) {
+	tokenListQuery := &TokenListQuery{}
 
-	result, err := s.useCase.List(c)
+	if err := defaults.Set(tokenListQuery); err != nil {
+		logger.Error(err)
+		//sentry.CaptureException(err)
+		c.JSON(
+			http.StatusExpectationFailed,
+			&Response{
+				Success: false,
+				ErrorCode: http.StatusExpectationFailed,
+				Message: "Cannot list tokens",
+				Data: &EmptyResponse{},
+			},
+		)
+		return
+	}
+	// binding to fetch data from query string
+	c.Bind(&tokenListQuery)
+	mapData := structs.Map(tokenListQuery)
+	result, err := s.useCase.ListToken(c, mapData)
 
 	if err != nil {
 		c.JSON(
@@ -58,6 +84,57 @@ func (s *ServiceHandler) List(c *gin.Context) {
 		Message: "List price successfully!",
 		ErrorCode: 0,
 		Data: result,
+	}
+
+	c.JSON(
+		http.StatusOK, response,
+	)
+}
+
+func (s *ServiceHandler) GetToken(c *gin.Context) {
+
+	tokenQuery := &TokenQuery{}
+
+	if err := defaults.Set(tokenQuery); err != nil {
+		logger.Error(err)
+		//sentry.CaptureException(err)
+		c.JSON(
+			http.StatusExpectationFailed,
+			&Response{
+				Success: false,
+				ErrorCode: http.StatusExpectationFailed,
+				Message: "Cannot get tokens",
+				Data: &EmptyResponse{},
+			},
+		)
+		return
+	}
+	// binding to fetch data from query string
+	c.Bind(&tokenQuery)
+	mapData := structs.Map(tokenQuery)
+
+	data, err := s.useCase.GetToken(c.Request.Context(), mapData)
+
+	if err != nil {
+		logger.Error(err)
+		//sentry.CaptureException(err)
+		c.JSON(
+			http.StatusExpectationFailed,
+			&Response{
+				Success: false,
+				ErrorCode: http.StatusExpectationFailed,
+				Message: "Cannot get token",
+				Data: &EmptyResponse{},
+			},
+		)
+		return
+	}
+
+	response := &Response{
+		Success: true,
+		Message: "Get token successfully!",
+		ErrorCode: 0,
+		Data: data,
 	}
 
 	c.JSON(

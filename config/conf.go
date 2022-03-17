@@ -80,7 +80,7 @@ func InitConfig() *AppConfig {
 				AuthEndPointURI: getEnv("AUTH_END_POINT_URI", "").(string),
 				StorageEndpointURI: getEnv("STORAGE_ENDPOINT_URI", "https//127.0.0.1").(string),
 				LogFile: getEnv("LOG_FILE", "app.log").(string),
-				EnabledCache: getEnv("ENABLED_CACHE", true).(bool),
+				EnabledCache: getEnv("ENABLED_CACHE", false).(bool),
 				BrokerURI: getEnv("BROKER_URL", "").(string),
 				WorkerProcessURI: getEnv("WORKER_PROCESS_URI", "").(string),
 				FeatureFlagSecret: getEnv("FEATURE_FLAG_SECRET", "").(string),
