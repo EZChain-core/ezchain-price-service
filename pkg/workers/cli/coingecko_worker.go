@@ -82,7 +82,7 @@ func main() {
 								}, taskID)
 								pool.AddTask(task)
 							}
-							time.Sleep(3000 * time.Millisecond)
+							time.Sleep(10000 * time.Millisecond)
 						}
 					}()
 					pool.RunBackground()
