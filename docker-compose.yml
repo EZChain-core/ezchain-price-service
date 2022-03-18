@@ -14,7 +14,9 @@ services:
   worker_interval:
     restart: always
     container_name: worker_interval
-    build: Dockerfile.worker
+    build:
+      context: .
+      dockerfile: ./Dockerfile.worker
     environment:
       MONGO_URI: ${MONGO_URI}
     volumes:
