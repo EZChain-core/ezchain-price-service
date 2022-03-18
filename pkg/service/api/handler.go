@@ -11,7 +11,7 @@ import (
 	"github.com/EZChain-core/price-service/logger"
 	"github.com/EZChain-core/price-service/config"
 	"github.com/EZChain-core/price-service/pkg/utils"
-	//gecko "github.com/superoo7/go-gecko/v3"
+	//gecko "github.com/enixdark/go-gecko/v3"
 )
 
 type ServiceHandler struct {

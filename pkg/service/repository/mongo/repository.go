@@ -57,7 +57,7 @@ func (m *ServiceMongoStorage) ListTokenPrice(optionDatas map[string]interface{})
 		contracts := strings.Split(optionDatas["contracts"].(string), ",")
 		allowQuery = true
 		for _, contract := range contracts {
-			filter = append(filter, bson.M{"contract": contract})
+			filter = append(filter, bson.M{"contracts.contract_address": contract})
 		}
 	}
 
@@ -106,12 +106,12 @@ func (m *ServiceMongoStorage) GetTokenPrice(optionDatas map[string]interface{}) 
 	}
 
 	if optionDatas["contract"] != nil && optionDatas["contract"].(string) != "" {
-		bData["contract"] = optionDatas["contract"].(string)
+		bData["contracts.contract_address"] = optionDatas["contract"].(string)
 		allowQuery = true
 	}
 
 	if optionDatas["chain"] != nil && optionDatas["chain"].(string) != "" {
-		bData["chain"] = optionDatas["chain"].(string)
+		bData["contracts.chain"] = optionDatas["chain"].(string)
 		allowQuery = true
 	}
 	if allowQuery == false {

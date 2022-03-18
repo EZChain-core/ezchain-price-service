@@ -2,6 +2,7 @@ package mongo
 
 import (
 	"time"
+	"github.com/kamva/mgm/v3"
 )
 
 type ListToken struct {
@@ -19,7 +20,6 @@ type Token struct {
 	Symbol                       string      `json:"symbol" bson:"symbol"`
 	Name                         string      `json:"name" bson:"name"`
 	Contracts 					 []Platform      `json:"contracts" bson:"contracts"`
-	IsNativeToken				 bool        `json:"is_native_token" bson:"is_native_token"`
 	Image                        string      `json:"image" bson:"image"`
 	CurrentPrice                 float64     `json:"current_price" bson:"current_price,truncate"`
 	MarketCap                    float64       `json:"market_cap" bson:"market_cap,truncate"`
@@ -35,12 +35,12 @@ type Token struct {
 	CirculatingSupply            float64         `json:"circulating_supply" bson:"circulating_supply"`
 	TotalSupply                  float64         `json:"total_supply" bson:"total_supply"`
 	MaxSupply                    float64         `json:"max_supply" bson:"max_supply"`
-	Ath                          float64         `json:"ath" bson:"ath"`
-	AthChangePercentage          float64     `json:"ath_change_percentage" bson:"ath_change_percentage,truncate"`
-	AthDate                      time.Time   `json:"ath_date" bson:"ath_date"`
-	Atl                          float64     `json:"atl" bson:"atl,truncate"`
-	AtlChangePercentage          float64     `json:"atl_change_percentage" bson:"atl_change_percentage,truncate"`
-	AtlDate                      time.Time   `json:"atl_date" bson:"atl_date"`
-	Roi                          interface{} `json:"roi" bson:"roi"`
+	ATH                          float64         `json:"ath" bson:"ath"`
+	ATHChangePercentage          float64     `json:"ath_change_percentage" bson:"ath_change_percentage,truncate"`
+	ATHDate                      time.Time   `json:"ath_date" bson:"ath_date"`
+	ATL                          float64     `json:"atl" bson:"atl,truncate"`
+	ATLChangePercentage          float64     `json:"atl_change_percentage" bson:"atl_change_percentage,truncate"`
+	ATLDate                      time.Time   `json:"atl_date" bson:"atl_date"`
+	ROI                          interface{} `json:"roi" bson:"roi"`
 	LastUpdated                  time.Time   `json:"last_updated" bson:"last_updated"`
 }

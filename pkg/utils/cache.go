@@ -44,7 +44,7 @@ func Serve(addr string, name string, peers string) *Cache {
 	pool.Set(p...)
 	c.Group = Group
 	go func() {
-		// return healthcheck api
+		// return healthcheck cli
 		http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprint(w, "Cache")
 		})

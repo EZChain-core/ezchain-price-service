@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-const defaultBaseURL = "https://api.coingecko.com/api/v3/"
+const defaultBaseURL = "https://cli.coingecko.com/cli/v3/"
 
 type Client struct {
 	// HTTP client used to communicate with the API

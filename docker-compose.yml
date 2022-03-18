@@ -11,3 +11,12 @@ services:
       MONGO_URI: ${MONGO_URI}
     volumes:
       - ./.env:/etc/price-service/.env:ro
+  worker_interval:
+    restart: always
+    container_name: worker_interval
+    build: Dockerfile.worker
+    environment:
+      MONGO_URI: ${MONGO_URI}
+    volumes:
+      - ./.env:/etc/price-service/.env:ro
+

@@ -10,6 +10,7 @@ require (
 	github.com/dgraph-io/ristretto v0.1.0 // indirect
 	github.com/enixdark/featurehub v0.0.0-20210601042123-807bbef0be48 // indirect
 	github.com/enixdark/featurehub/sdks/client-go v0.0.0-20210601042123-807bbef0be48
+	github.com/enixdark/go-gecko v1.0.1
 	github.com/fatih/structs v1.1.0
 	github.com/gertd/go-pluralize v0.1.7
 	github.com/getsentry/sentry-go v0.9.0 // indirect
@@ -22,7 +23,7 @@ require (
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-querystring v1.0.0
-	github.com/google/wire v0.4.0
+	github.com/google/wire v0.4.0 // indirect
 	github.com/gopherjs/gopherjs v0.0.0-20190309154008-847fc94819f9 // indirect
 	github.com/iromli/go-itsdangerous v0.0.0-20190903235033-828af6836b4f
 	github.com/joho/godotenv v1.3.0
@@ -43,12 +44,11 @@ require (
 	github.com/stretchr/objx v0.3.0 // indirect
 	github.com/stretchr/testify v1.7.0 // indirect
 	github.com/stvp/rollbar v0.5.1
-	github.com/superoo7/go-gecko v1.0.0 // indirect
 	github.com/swaggo/files v0.0.0-20210815190702-a29dd2bc99b2
 	github.com/swaggo/gin-swagger v1.3.2
 	github.com/swaggo/swag v1.6.7
 	github.com/ugorji/go v1.2.7 // indirect
-	github.com/urfave/cli v1.20.0 // indirect
+	github.com/urfave/cli v1.22.5
 	github.com/urfave/cli/v2 v2.4.0 // indirect
 	go.elastic.co/apm v1.11.0 // indirect
 	go.elastic.co/apm/module/apmgin v1.11.0
