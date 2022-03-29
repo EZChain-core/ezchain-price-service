@@ -77,6 +77,7 @@ func NewServer(port int, mode GinServerMode, config *config.AppConfig) GinServer
 			"http://localhost:5000",
 			"https://127.0.0.1:5000",
 			"https://localhost:5000",
+			"https://wallet.ezchain.com",
 		},
 		AllowCredentials: true,
 		Debug: true,
