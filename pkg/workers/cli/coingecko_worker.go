@@ -120,7 +120,7 @@ func main() {
 						fmt.Println(data)
 						fmt.Println("-----------------------------------------------------")
 						serviceUseCase.ImportLBankEZC(context, &data)
-						time.Sleep(300000 * time.Millisecond)
+						time.Sleep(time.Duration(appConfig.LBankIntervalTime) * time.Second)
 					}
 					return nil
 				},
