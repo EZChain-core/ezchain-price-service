@@ -73,6 +73,8 @@ func NewServer(port int, mode GinServerMode, config *config.AppConfig) GinServer
 		ExposedHeaders:    []string{"Content-Length"},
 		AllowedOrigins: []string{
 			"http://127.0.0.1:8000",
+			"http://127.0.0.1:5000",
+			"http://localhost:5000",
 		},
 		AllowCredentials: true,
 		Debug: true,
@@ -111,13 +113,13 @@ func NewServer(port int, mode GinServerMode, config *config.AppConfig) GinServer
 	if err == nil {
 		featureflag.Start()
 	}
-	// register api
+	// register cli
 	serviceapi.RegisterHTTPEndpoints(s.Router, *serviceUsecase, config, cache, i18n, featureflag)
 	healthapi.RegisterHTTPEndpoints(s.Router, config)
 	adminapi.RegisterHTTPEndpoints(s.Router, *adminUsecase, config, cache, i18n, featureflag)
 	// API endpoints
 	//authMiddleware := userapi.NewAuthMiddleware(a.authUC)
-	//api := s.Router.Group("/api", authMiddleware)
+	//cli := s.Router.Group("/cli", authMiddleware)
 
 	switch mode {
 	case DebugMode:
