@@ -37,6 +37,7 @@ type AppConfig struct {
 	SecretToken string `mapstructure:"secret_token"`
 	LBankApiKey string `mapstructure:"lbank_api_key"`
 	LBankSecretKey string `mapstructure:"lbank_secret_key"`
+	LBankIntervalTime int `mapstructure:"lbank_interval_time"`
 }
 
 var (
@@ -90,6 +91,7 @@ func InitConfig() *AppConfig {
 				SecretToken: getEnv("SECRET_TOKEN", "").(string),
 				LBankApiKey: getEnv("LBANK_API_KEY", "").(string),
 				LBankSecretKey: getEnv("LBANK_SECRET_KEY", "").(string),
+				LBankIntervalTime: getEnv("LBANK_INTERVAL_TIME", 150).(int),
 			}
 		},
 	)
