@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"math/rand"
 
@@ -19,6 +20,8 @@ import (
 	"github.com/EZChain-core/price-service/config"
 	"github.com/EZChain-core/price-service/pkg/workers/usecase"
 	"github.com/EZChain-core/price-service/pkg/workers/repository/mongo"
+	"github.com/EZChain-core/price-service/pkg/utils/lbank/module"
+	"github.com/EZChain-core/price-service/pkg/utils/lbank/constant"
 	gecko "github.com/enixdark/go-gecko/v3"
 	geckoTypes "github.com/enixdark/go-gecko/v3/types"
 
@@ -100,6 +103,25 @@ func main() {
 						log.Fatal(err)
 					}
 					serviceUseCase.Import(context, list)
+					return nil
+				},
+			},
+			{
+				Name:  "lbank",
+				Usage: "run fetch price in background for lbank",
+				Action: func(c *cli.Context) error {
+					fmt.Println("Processing fetch lbank")
+					client := module.NewLbankClientWithKey(appConfig.LBankApiKey, appConfig.LBankSecretKey)
+					for {
+						res, _ := client.LatestPrice("ezc_usdt")
+						result, _ := json.Marshal(res)
+						data := constant.LastPrice{}
+						json.Unmarshal([]byte(string(result)), &data)
+						fmt.Println(data)
+						fmt.Println("-----------------------------------------------------")
+						serviceUseCase.ImportLBankEZC(context, &data)
+						time.Sleep(300000 * time.Millisecond)
+					}
 					return nil
 				},
 			},

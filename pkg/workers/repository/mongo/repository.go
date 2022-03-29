@@ -3,6 +3,7 @@ package mongo
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"time"
 
 	//"fmt"
@@ -17,6 +18,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	//"go.mongodb.org/mongo-driver/mongo/options"
 	geckoTypes "github.com/enixdark/go-gecko/v3/types"
+	"github.com/EZChain-core/price-service/pkg/utils/lbank/constant"
 
 )
 
@@ -121,6 +123,26 @@ func (m *ServiceMongoStorage) Import(tokens *geckoTypes.CoinList) (*bool, error)
 			}
 		}
 		result = true
+	}
+	return &result, nil
+}
+
+func (m *ServiceMongoStorage) ImportLBankEZC(data *constant.LastPrice) (*bool, error) {
+	result := false
+	t := &Token{}
+	coll := mgm.Coll(t)
+	err := coll.First(bson.M{"id": "ezc", "symbol": "ezc"}, t)
+	if err != nil {
+		return &result, err
+	} else {
+		result = true
+		tokenUpdate := t
+		tokenUpdate.CurrentPrice, _ = strconv.ParseFloat(data.Data[0].Price,4)
+		tokenUpdate.UpdatedAt = time.Now()
+		err := mgm.Coll(tokenUpdate).Update(tokenUpdate)
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
 	return &result, nil
 }

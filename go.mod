@@ -69,6 +69,10 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 	honnef.co/go/tools v0.0.1-2020.1.4 // indirect
+	github.com/google/uuid v1.1.1
+    github.com/gorilla/websocket v1.4.1
+    github.com/shopspring/decimal v0.0.0-20191130220710-360f2bc03045
 )
 
 module github.com/EZChain-core/price-service
+

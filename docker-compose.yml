@@ -21,4 +21,26 @@ services:
       MONGO_URI: ${MONGO_URI}
     volumes:
       - ./.env:/etc/price-service/.env:ro
-
+  worker_lbank:
+    restart: always
+    container_name: worker_lbank
+    command: /bin/worker blank
+    build:
+      context: .
+      dockerfile: ./Dockerfile.worker
+    environment:
+      MONGO_URI: ${MONGO_URI}
+      LBANK_API_KEY: ${LBANK_API_KEY}
+      LBANK_SECRET_KEY: ${LBANK_SECRET_KEY}
+    volumes:
+      - ./.env:/etc/price-service/.env:ro
+#  mongodb:
+#    image: mongo:5.0
+#    ports:
+#      - 27017:27017
+##    volumes:
+##      - ~/apps/mongo:/data/db
+#    environment:
+#      - MONGO_INITDB_ROOT_USERNAME=root
+#      - MONGO_INITDB_ROOT_PASSWORD=password
+#      - MONGO_INITDB_DATABASE=coingecko
