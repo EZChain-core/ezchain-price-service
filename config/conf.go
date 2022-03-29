@@ -35,6 +35,8 @@ type AppConfig struct {
 	FeatureFlagServerURI string `mapstructure:"feature_flag_server_uri"`
 	FeatureFlagSecret string `mapstructure:"feature_flag_secret"`
 	SecretToken string `mapstructure:"secret_token"`
+	LBankApiKey string `mapstructure:"lbank_api_key"`
+	LBankSecretKey string `mapstructure:"lbank_secret_key"`
 }
 
 var (
@@ -86,6 +88,8 @@ func InitConfig() *AppConfig {
 				FeatureFlagSecret: getEnv("FEATURE_FLAG_SECRET", "").(string),
 				FeatureFlagServerURI: getEnv("FEATURE_FLAG_SERVER_URI", "").(string),
 				SecretToken: getEnv("SECRET_TOKEN", "").(string),
+				LBankApiKey: getEnv("LBANK_API_KEY", "").(string),
+				LBankSecretKey: getEnv("LBANK_SECRET_KEY", "").(string),
 			}
 		},
 	)
