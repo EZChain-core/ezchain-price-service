@@ -24,7 +24,7 @@ services:
   worker_lbank:
     restart: always
     container_name: worker_lbank
-    command: /bin/worker blank
+    command: /bin/worker lbank
     build:
       context: .
       dockerfile: ./Dockerfile.worker
