@@ -65,7 +65,7 @@ func (m *ServiceMongoStorage) ListTokenPrice(optionDatas map[string]interface{})
 		chains := strings.Split(optionDatas["chains"].(string), ",")
 		allowQuery = true
 		for _, chain := range chains {
-			filter = append(filter, bson.M{"chain": chain})
+			filter = append(filter, bson.M{"contracts.chain": chain})
 		}
 	}
 	if allowQuery == true {
@@ -77,7 +77,7 @@ func (m *ServiceMongoStorage) ListTokenPrice(optionDatas map[string]interface{})
 		bData["is_native_token"] = &native
 	}
 
-	err := mgm.Coll(&Token{}).SimpleFind(&result, bData, pagination)
+		err := mgm.Coll(&Token{}).SimpleFind(&result, bData, pagination)
 	if err != nil {
 		return nil, err
 	}
@@ -85,7 +85,7 @@ func (m *ServiceMongoStorage) ListTokenPrice(optionDatas map[string]interface{})
 }
 
 func (m *ServiceMongoStorage) GetTokenPrice(optionDatas map[string]interface{}) (*Token, error) {
-	ctx := mgm.Ctx()
+	//ctx := mgm.Ctx()
 	token := &Token{}
 	bData := bson.M{}
 	allowQuery := false
@@ -117,7 +117,7 @@ func (m *ServiceMongoStorage) GetTokenPrice(optionDatas map[string]interface{}) 
 	if allowQuery == false {
 		return token, nil
 	}
-	err := mgm.Coll(token).FirstWithCtx(ctx, bData, token)
+	err := mgm.Coll(token).First(bData, token)
 	if err != nil {
 		return nil, err
 	}
