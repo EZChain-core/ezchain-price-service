@@ -1,9 +1,10 @@
 package api
 
 import (
-	"github.com/gin-gonic/gin"
-	u "github.com/EZChain-core/price-service/pkg/service/usecase"
 	"github.com/EZChain-core/price-service/config"
+	u "github.com/EZChain-core/price-service/pkg/service/usecase"
+	"github.com/gin-gonic/gin"
+
 	//"github.com/EZChain-core/price-service/pkg/middleware"
 	"github.com/EZChain-core/price-service/pkg/utils"
 )
@@ -14,5 +15,7 @@ func RegisterHTTPEndpoints(router *gin.Engine, uc u.ServiceUseCase, config *conf
 	{
 		api.GET("/service/tokens", h.List)
 		api.GET("/service/token", h.GetToken)
+		api.GET("/service/validator", h.GetValidator)
+		api.GET("/service/validators", h.ListValidator)
 	}
 }

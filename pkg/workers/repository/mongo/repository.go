@@ -12,14 +12,14 @@ import (
 	//"strings"
 
 	//"log"
-	"github.com/EZChain-core/price-service/pkg/utils"
 	"github.com/EZChain-core/price-service/config"
+	"github.com/EZChain-core/price-service/pkg/utils"
 	"github.com/kamva/mgm/v3"
 	"go.mongodb.org/mongo-driver/bson"
-	//"go.mongodb.org/mongo-driver/mongo/options"
-	geckoTypes "github.com/enixdark/go-gecko/v3/types"
-	"github.com/EZChain-core/price-service/pkg/utils/lbank/constant"
 
+	//"go.mongodb.org/mongo-driver/mongo/options"
+	"github.com/EZChain-core/price-service/pkg/utils/lbank/constant"
+	geckoTypes "github.com/enixdark/go-gecko/v3/types"
 )
 
 type ServiceMongoStorage struct {
@@ -32,7 +32,6 @@ func NewServiceMongoStorage(ctx context.Context, appConfig *config.AppConfig) *S
 			ctx, appConfig,
 		),
 	}
-	return nil
 }
 
 func (m *ServiceMongoStorage) Upsert(tokens *geckoTypes.CoinsMarket) (*bool, error) {
@@ -44,25 +43,25 @@ func (m *ServiceMongoStorage) Upsert(tokens *geckoTypes.CoinsMarket) (*bool, err
 		err := coll.First(bson.M{"id": item.ID, "symbol": item.Symbol}, t)
 		if err != nil {
 			token := &Token{
-				ID     :item.ID,
-				Symbol: item.Symbol,
-				Name: item.Name,
-				Image: item.Image,
-				CurrentPrice: item.CurrentPrice,
-				MarketCap: item.MarketCap,
+				ID:            item.ID,
+				Symbol:        item.Symbol,
+				Name:          item.Name,
+				Image:         item.Image,
+				CurrentPrice:  item.CurrentPrice,
+				MarketCap:     item.MarketCap,
 				MarketCapRank: item.MarketCapRank,
 				//FullyDilutedValuation = item.FullyDilutedValuation,
-				TotalVolume: item.TotalVolume,
-				High24H: item.High24,
-				Low24H: item.Low24,
-				PriceChange24H: item.PriceChange24h,
-				PriceChangePercentage24H: item.PriceChangePercentage24h,
-				MarketCapChange24H: item.MarketCapChange24h,
+				TotalVolume:                  item.TotalVolume,
+				High24H:                      item.High24,
+				Low24H:                       item.Low24,
+				PriceChange24H:               item.PriceChange24h,
+				PriceChangePercentage24H:     item.PriceChangePercentage24h,
+				MarketCapChange24H:           item.MarketCapChange24h,
 				MarketCapChangePercentage24H: item.MarketCapChangePercentage24h,
-				CirculatingSupply: item.CirculatingSupply,
-				TotalSupply: item.TotalSupply,
+				CirculatingSupply:            item.CirculatingSupply,
+				TotalSupply:                  item.TotalSupply,
 				//MaxSupply = item.MaxSupply
-				ATH: item.ATH,
+				ATH:                 item.ATH,
 				ATHChangePercentage: item.ATHChangePercentage,
 				//ATHDate = item.ATHDate,
 				ROI: item.ROI,
@@ -137,7 +136,7 @@ func (m *ServiceMongoStorage) ImportLBankEZC(data *constant.LastPrice) (*bool, e
 	} else {
 		result = true
 		tokenUpdate := t
-		tokenUpdate.CurrentPrice, _ = strconv.ParseFloat(data.Data[0].Price,4)
+		tokenUpdate.CurrentPrice, _ = strconv.ParseFloat(data.Data[0].Price, 4)
 		tokenUpdate.UpdatedAt = time.Now()
 		err := mgm.Coll(tokenUpdate).Update(tokenUpdate)
 		if err != nil {
