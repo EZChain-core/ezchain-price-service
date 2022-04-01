@@ -339,6 +339,9 @@ func main() {
 						CSupply, _ := new(big.Int).SetString(hexaNumberToInteger(dataCBalance.Result), 16)
 						totalSupply := currentSupply.Sub(currentSupply, totalValidatorBalance)
 						totalSupply = totalSupply.Add(totalSupply, CSupply)
+						if(totalSupply.Cmp(big.NewInt(1).Mul(big.NewInt(500000000), big.NewInt(1000000000000000000))) > 0) {
+							totalSupply = big.NewInt(1).Mul(big.NewInt(500000000), big.NewInt(1000000000000000000))
+						}
 						maxSupply := new(big.Int).SetInt64(0)
 						circulatingCaculate := new(big.Int).Set(totalSupply)
 						circulatingCaculate = circulatingCaculate.Sub(circulatingCaculate, circulatingSupply)
