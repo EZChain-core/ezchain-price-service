@@ -5,12 +5,11 @@ import (
 	"strings"
 
 	//"log"
-	"github.com/EZChain-core/price-service/pkg/utils"
 	"github.com/EZChain-core/price-service/config"
+	"github.com/EZChain-core/price-service/pkg/utils"
 	"github.com/kamva/mgm/v3"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
-
 )
 
 type ServiceMongoStorage struct {
@@ -23,8 +22,8 @@ func NewServiceMongoStorage(ctx context.Context, appConfig *config.AppConfig) *S
 			ctx, appConfig,
 		),
 	}
-	return nil
 }
+
 func (m *ServiceMongoStorage) ListTokenPrice(optionDatas map[string]interface{}) ([]Token, error) {
 	result := []Token{}
 	bData := bson.M{}
@@ -68,7 +67,7 @@ func (m *ServiceMongoStorage) ListTokenPrice(optionDatas map[string]interface{})
 			filter = append(filter, bson.M{"contracts.chain": chain})
 		}
 	}
-	if allowQuery == true {
+	if allowQuery {
 		bData["$or"] = filter
 	}
 
@@ -77,7 +76,7 @@ func (m *ServiceMongoStorage) ListTokenPrice(optionDatas map[string]interface{})
 		bData["is_native_token"] = &native
 	}
 
-		err := mgm.Coll(&Token{}).SimpleFind(&result, bData, pagination)
+	err := mgm.Coll(&Token{}).SimpleFind(&result, bData, pagination)
 	if err != nil {
 		return nil, err
 	}
@@ -89,7 +88,7 @@ func (m *ServiceMongoStorage) GetTokenPrice(optionDatas map[string]interface{}) 
 	token := &Token{}
 	bData := bson.M{}
 	allowQuery := false
-	if optionDatas["is_native_token"].(*bool) != nil{
+	if optionDatas["is_native_token"].(*bool) != nil {
 		native := optionDatas["is_native_token"].(*bool)
 		bData["is_native_token"] = &native
 		allowQuery = true
@@ -114,7 +113,7 @@ func (m *ServiceMongoStorage) GetTokenPrice(optionDatas map[string]interface{}) 
 		bData["contracts.chain"] = optionDatas["chain"].(string)
 		allowQuery = true
 	}
-	if allowQuery == false {
+	if allowQuery {
 		return token, nil
 	}
 	err := mgm.Coll(token).First(bData, token)
@@ -122,4 +121,57 @@ func (m *ServiceMongoStorage) GetTokenPrice(optionDatas map[string]interface{}) 
 		return nil, err
 	}
 	return token, nil
+}
+
+func (m *ServiceMongoStorage) GetValidator(optionDatas map[string]interface{}) (*Validator, error) {
+	//ctx := mgm.Ctx()
+	validator := &Validator{}
+	bData := bson.M{}
+	allowQuery := false
+
+	if optionDatas["name"] != nil && optionDatas["name"].(string) != "" {
+		bData["name"] = optionDatas["name"].(string)
+		allowQuery = true
+	}
+
+	if optionDatas["node_id"] != nil && optionDatas["node_id"].(string) != "" {
+		bData["node_id"] = optionDatas["node_id"].(string)
+		allowQuery = true
+	}
+
+	if !allowQuery {
+		return validator, nil
+	}
+
+	err := mgm.Coll(validator).First(bData, validator)
+	if err != nil {
+		return nil, err
+	}
+	return validator, nil
+}
+
+func (m *ServiceMongoStorage) ListValidator(optionDatas map[string]interface{}) ([]Validator, error) {
+	result := []Validator{}
+	bData := bson.M{}
+
+	limit := optionDatas["limit"].(int64)
+	skip := optionDatas["offset"].(int64)
+	pagination := &options.FindOptions{
+		Limit: &limit,
+		Skip:  &skip,
+	}
+
+	if optionDatas["name"] != nil && optionDatas["name"].(string) != "" {
+		bData["name"] = optionDatas["name"].(string)
+	}
+
+	if optionDatas["node_id"] != nil && optionDatas["node_id"].(string) != "" {
+		bData["node_id"] = optionDatas["node_id"].(string)
+	}
+
+	err := mgm.Coll(&Validator{}).SimpleFind(&result, bData, pagination)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }

@@ -32,3 +32,19 @@ func (s *ServiceUseCase) GetToken(ctx context.Context, options map[string]interf
 	}
 	return result, nil
 }
+
+func (s *ServiceUseCase) GetValidator(ctx context.Context, options map[string]interface{}) (*rp.Validator, error) {
+	result, err := s.ServiceRepo.GetValidator(options)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+func (s *ServiceUseCase) ListValidator(ctx context.Context, options map[string]interface{}) ([]rp.Validator, error) {
+	result, err := s.ServiceRepo.ListValidator(options)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
