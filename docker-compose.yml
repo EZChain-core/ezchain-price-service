@@ -34,6 +34,19 @@ services:
       LBANK_SECRET_KEY: ${LBANK_SECRET_KEY}
     volumes:
       - ./.env:/etc/price-service/.env:ro
+  worker_supplies:
+    restart: always
+    container_name: worker_supplies
+    command: /bin/worker supply
+    build:
+      context: .
+      dockerfile: ./Dockerfile.worker
+    environment:
+      MONGO_URI: ${MONGO_URI}
+      LBANK_API_KEY: ${LBANK_API_KEY}
+      LBANK_SECRET_KEY: ${LBANK_SECRET_KEY}
+    volumes:
+      - ./.env:/etc/price-service/.env:ro
 #  mongodb:
 #    image: mongo:5.0
 #    ports:
