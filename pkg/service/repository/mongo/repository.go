@@ -113,7 +113,7 @@ func (m *ServiceMongoStorage) GetTokenPrice(optionDatas map[string]interface{}) 
 		bData["contracts.chain"] = optionDatas["chain"].(string)
 		allowQuery = true
 	}
-	if allowQuery {
+	if !allowQuery {
 		return token, nil
 	}
 	err := mgm.Coll(token).First(bData, token)
