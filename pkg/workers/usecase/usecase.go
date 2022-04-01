@@ -2,6 +2,8 @@ package usecase
 
 import (
 	"context"
+	"math/big"
+
 	//"github.com/EZChain-core/price-service/logger"
 	//d "github.com/EZChain-core/price-service/pkg/domain"
 	rp "github.com/EZChain-core/price-service/pkg/workers/repository/mongo"
@@ -37,6 +39,14 @@ func (s *ServiceUseCase) Import(ctx context.Context, tokens *geckoTypes.CoinList
 
 func (s *ServiceUseCase) ImportLBankEZC(ctx context.Context, data *constant.LastPrice) (*bool, error) {
 	result, err := s.ServiceRepo.ImportLBankEZC(data)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+func (s *ServiceUseCase) UpdateEZCSupply(ctx context.Context, maxSupply *big.Int, totalSupply *big.Int, circulatingSupply *big.Int) (*bool, error) {
+	result, err := s.ServiceRepo.UpdateEZCSupply(maxSupply, totalSupply, circulatingSupply)
 	if err != nil {
 		return nil, err
 	}

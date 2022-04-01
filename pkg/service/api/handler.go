@@ -236,3 +236,36 @@ func (s *ServiceHandler) ListValidator(c *gin.Context) {
 		http.StatusOK, response,
 	)
 }
+
+func (s *ServiceHandler) GetEZCSupplies(c *gin.Context) {
+
+	result, err := s.useCase.GetEZCSupplies(c)
+
+	if err != nil {
+		c.JSON(
+			http.StatusNotFound,
+			&Response{
+				Success: false,
+				ErrorCode: http.StatusNotFound,
+				Message: "Cannot get supplies for prices",
+				Data: make([]EmptyResponse, 0),
+			},
+		)
+		return
+	}
+
+	response := &Response{
+		Success: true,
+		Message: "Get EZC supply successfully!",
+		ErrorCode: 0,
+		Data: &SupplyDataResponse{
+			result.CirculatingSupply,
+			result.TotalSupply,
+			result.MaxSupply,
+		},
+	}
+
+	c.JSON(
+		http.StatusOK, response,
+	)
+}

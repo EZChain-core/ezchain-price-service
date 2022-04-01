@@ -3,6 +3,7 @@ package mongo
 import (
 	"context"
 	"fmt"
+	"math/big"
 	"strconv"
 	"time"
 
@@ -137,6 +138,28 @@ func (m *ServiceMongoStorage) ImportLBankEZC(data *constant.LastPrice) (*bool, e
 		result = true
 		tokenUpdate := t
 		tokenUpdate.CurrentPrice, _ = strconv.ParseFloat(data.Data[0].Price, 4)
+		tokenUpdate.UpdatedAt = time.Now()
+		err := mgm.Coll(tokenUpdate).Update(tokenUpdate)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+	return &result, nil
+}
+
+func (m *ServiceMongoStorage) UpdateEZCSupply(maxSupply *big.Int, totalSupply *big.Int, circulatingSupply *big.Int) (*bool, error) {
+	result := false
+	t := &Token{}
+	coll := mgm.Coll(t)
+	err := coll.First(bson.M{"id": "ezc", "symbol": "ezc"}, t)
+	if err != nil {
+		return &result, err
+	} else {
+		result = true
+		tokenUpdate := t
+		tokenUpdate.CirculatingSupply, _ = strconv.ParseFloat(new(big.Float).SetInt(circulatingSupply).String(), 64)
+		tokenUpdate.MaxSupply, _ = strconv.ParseFloat(new(big.Float).SetInt(maxSupply).String(), 64)
+		tokenUpdate.TotalSupply, _ = strconv.ParseFloat(new(big.Float).SetInt(totalSupply).String(), 64)
 		tokenUpdate.UpdatedAt = time.Now()
 		err := mgm.Coll(tokenUpdate).Update(tokenUpdate)
 		if err != nil {

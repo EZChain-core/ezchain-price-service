@@ -17,5 +17,6 @@ func RegisterHTTPEndpoints(router *gin.Engine, uc u.ServiceUseCase, config *conf
 		api.GET("/service/token", h.GetToken)
 		api.GET("/service/validator", h.GetValidator)
 		api.GET("/service/validators", h.ListValidator)
+		api.GET("/service/supplies", h.GetEZCSupplies)
 	}
 }

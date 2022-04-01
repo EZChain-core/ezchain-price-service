@@ -48,3 +48,11 @@ func (s *ServiceUseCase) ListValidator(ctx context.Context, options map[string]i
 	}
 	return result, nil
 }
+
+func (s *ServiceUseCase) GetEZCSupplies(ctx context.Context) (*rp.Token, error) {
+	result, err := s.ServiceRepo.GetEZCSupplies()
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}

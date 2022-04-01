@@ -28,11 +28,14 @@ type AppConfig struct {
 	BrokerURI            string `mapstructure:"broker_uri"`
 	WorkerProcessURI     string `mapstructure:"worker_process_uri"`
 	FeatureFlagServerURI string `mapstructure:"feature_flag_server_uri"`
-	FeatureFlagSecret    string `mapstructure:"feature_flag_secret"`
-	SecretToken          string `mapstructure:"secret_token"`
-	LBankApiKey          string `mapstructure:"lbank_api_key"`
-	LBankSecretKey       string `mapstructure:"lbank_secret_key"`
-	LBankIntervalTime    int    `mapstructure:"lbank_interval_time"`
+	FeatureFlagSecret string `mapstructure:"feature_flag_secret"`
+	SecretToken string `mapstructure:"secret_token"`
+	LBankApiKey string `mapstructure:"lbank_api_key"`
+	LBankSecretKey string `mapstructure:"lbank_secret_key"`
+	LBankIntervalTime int `mapstructure:"lbank_interval_time"`
+	RPCEZChainXURI string `mapstructure:"rpc_ezchain_x_uri"`
+	RPCEZChainCURI string `mapstructure:"rpc_ezchain_c_uri"`
+	RPCEZChainPURI string `mapstructure:"rpc_ezchain_p_uri"`
 }
 
 var (
@@ -83,10 +86,13 @@ func InitConfig() *AppConfig {
 				WorkerProcessURI:     getEnv("WORKER_PROCESS_URI", "").(string),
 				FeatureFlagSecret:    getEnv("FEATURE_FLAG_SECRET", "").(string),
 				FeatureFlagServerURI: getEnv("FEATURE_FLAG_SERVER_URI", "").(string),
-				SecretToken:          getEnv("SECRET_TOKEN", "").(string),
-				LBankApiKey:          getEnv("LBANK_API_KEY", "").(string),
-				LBankSecretKey:       getEnv("LBANK_SECRET_KEY", "").(string),
-				LBankIntervalTime:    getEnv("LBANK_INTERVAL_TIME", 150).(int),
+				SecretToken: getEnv("SECRET_TOKEN", "").(string),
+				LBankApiKey: getEnv("LBANK_API_KEY", "").(string),
+				LBankSecretKey: getEnv("LBANK_SECRET_KEY", "").(string),
+				LBankIntervalTime: getEnv("LBANK_INTERVAL_TIME", 150).(int),
+				RPCEZChainXURI: getEnv("RPC_EZCHAIN_X_URI", "https://api.ezchain.com/ext/bc/X").(string),
+				RPCEZChainCURI: getEnv("RPC_EZCHAIN_C_URI", "https://api.ezchain.com/ext/bc/C/rpc").(string),
+				RPCEZChainPURI: getEnv("RPC_EZCHAIN_P_URI", "https://api.ezchain.com/ext/bc/P").(string),
 			}
 		},
 	)
