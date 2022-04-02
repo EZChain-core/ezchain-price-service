@@ -153,6 +153,8 @@ func (m *ServiceMongoStorage) GetValidator(optionDatas map[string]interface{}) (
 func (m *ServiceMongoStorage) ListValidator(optionDatas map[string]interface{}) ([]Validator, error) {
 	result := []Validator{}
 	bData := bson.M{}
+	filter := []bson.M{}
+	allowQuery := false
 
 	limit := optionDatas["limit"].(int64)
 	skip := optionDatas["offset"].(int64)
@@ -161,12 +163,20 @@ func (m *ServiceMongoStorage) ListValidator(optionDatas map[string]interface{}) 
 		Skip:  &skip,
 	}
 
+	if optionDatas["node_ids"] != nil && optionDatas["node_ids"].(string) != "" {
+		node_ids := strings.Split(optionDatas["node_ids"].(string), ",")
+		allowQuery = true
+		for _, node_id := range node_ids {
+			filter = append(filter, bson.M{"node_id": node_id})
+		}
+	}
+
 	if optionDatas["name"] != nil && optionDatas["name"].(string) != "" {
 		bData["name"] = optionDatas["name"].(string)
 	}
 
-	if optionDatas["node_id"] != nil && optionDatas["node_id"].(string) != "" {
-		bData["node_id"] = optionDatas["node_id"].(string)
+	if allowQuery {
+		bData["$or"] = filter
 	}
 
 	err := mgm.Coll(&Validator{}).SimpleFind(&result, bData, pagination)
@@ -187,4 +197,3 @@ func (m *ServiceMongoStorage) GetEZCSupplies() (*Token, error) {
 	}
 	return token, nil
 }
-
