@@ -32,4 +32,5 @@ make gen
 - run server:
 
 ```bash
-;MICRO_SERVER_ADDRESS=:8000 MICRO_REGISTRY=etcd go run -mod=mod cmd/*.go```
+MICRO_SERVER_ADDRESS=:8000 MICRO_REGISTRY=etcd go run -mod=mod cmd/*.go
+```
