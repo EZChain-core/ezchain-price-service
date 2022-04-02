@@ -28,7 +28,6 @@ type ValidatorQuery struct {
 
 type ValidatorListQuery struct {
 	Name    string `form:"name" json:"name" structs:"name"`
-	NodeID  string `form:"node_id" json:"node_id" structs:"node_id"`
 	NodeIDs string `form:"node_ids" json:"node_ids" structs:"node_ids"`
 
 	Sort   string `form:"sort" json:"sort" structs:"sort"`

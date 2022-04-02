@@ -175,10 +175,6 @@ func (m *ServiceMongoStorage) ListValidator(optionDatas map[string]interface{}) 
 		bData["name"] = optionDatas["name"].(string)
 	}
 
-	if optionDatas["node_id"] != nil && optionDatas["node_id"].(string) != "" {
-		bData["node_id"] = optionDatas["node_id"].(string)
-	}
-
 	if allowQuery {
 		bData["$or"] = filter
 	}
