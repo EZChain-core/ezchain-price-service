@@ -189,7 +189,7 @@ func (m *ServiceMongoStorage) ListValidator(optionDatas map[string]interface{}) 
 func (m *ServiceMongoStorage) GetEZCSupplies() (*Token, error) {
 	//ctx := mgm.Ctx()
 	token := &Token{}
-	bData := bson.M{"symbol": "ezc", "id": "ezc", "contracts.chain": "ezchain"}
+	bData := bson.M{"symbol": "ezc", "id": "ezchain", "contracts.chain": "ezchain"}
 
 	err := mgm.Coll(token).First(bData, token)
 	if err != nil {
