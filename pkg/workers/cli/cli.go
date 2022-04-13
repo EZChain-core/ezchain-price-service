@@ -22,8 +22,8 @@ import (
 	"github.com/EZChain-core/price-service/config"
 	"github.com/EZChain-core/price-service/pkg/workers/usecase"
 	"github.com/EZChain-core/price-service/pkg/workers/repository/mongo"
-	"github.com/EZChain-core/price-service/pkg/utils/lbank/module"
-	"github.com/EZChain-core/price-service/pkg/utils/lbank/constant"
+	//"github.com/EZChain-core/price-service/pkg/utils/lbank/module"
+	//"github.com/EZChain-core/price-service/pkg/utils/lbank/constant"
 	gecko "github.com/enixdark/go-gecko/v3"
 	geckoTypes "github.com/enixdark/go-gecko/v3/types"
 
@@ -171,15 +171,29 @@ func main() {
 				Usage: "run fetch price in background for lbank",
 				Action: func(c *cli.Context) error {
 					fmt.Println("Processing fetch lbank")
-					client := module.NewLbankClientWithKey(appConfig.LBankApiKey, appConfig.LBankSecretKey)
+					//client := module.NewLbankClientWithKey(appConfig.LBankApiKey, appConfig.LBankSecretKey)
 					for {
-						res, _ := client.LatestPrice("ezc_usdt")
-						result, _ := json.Marshal(res)
-						data := constant.LastPrice{}
-						json.Unmarshal([]byte(string(result)), &data)
-						fmt.Println(data)
-						fmt.Println("-----------------------------------------------------")
-						serviceUseCase.ImportLBankEZC(context, &data)
+						//res, _ := client.LatestPrice("ezc_usdt")
+						//result, _ := json.Marshal(res)
+						//data := constant.LastPrice{}
+						//json.Unmarshal([]byte(string(result)), &data)
+						//fmt.Println(data)
+						//fmt.Println("-----------------------------------------------------")
+						////serviceUseCase.ImportLBankEZC(context, &data)
+
+						cg := gecko.NewClient(nil)
+						// find specific coins
+						vsCurrency := "usd"
+						ids := []string{"ezchain"}
+						perPage := 1
+						page := 1
+						sparkline := true
+						pcp := geckoTypes.PriceChangePercentageObject
+						priceChangePercentage := []string{pcp.PCP1h, pcp.PCP24h, pcp.PCP7d, pcp.PCP14d, pcp.PCP30d, pcp.PCP200d, pcp.PCP1y}
+						order := geckoTypes.OrderTypeObject.MarketCapDesc
+						market, _ := cg.CoinsMarket(vsCurrency, ids, order, perPage, page, sparkline, priceChangePercentage)
+						serviceUseCase.Upsert(context, market)
+						fmt.Printf("Task %d processed\n", market)
 						time.Sleep(time.Duration(appConfig.LBankIntervalTime) * time.Second)
 					}
 					return nil
