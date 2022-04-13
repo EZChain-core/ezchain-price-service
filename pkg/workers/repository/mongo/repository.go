@@ -151,7 +151,7 @@ func (m *ServiceMongoStorage) UpdateEZCSupply(maxSupply *big.Int, totalSupply *b
 	result := false
 	t := &Token{}
 	coll := mgm.Coll(t)
-	err := coll.First(bson.M{"id": "ezc", "symbol": "ezc"}, t)
+	err := coll.First(bson.M{"id": "ezchain", "symbol": "ezc"}, t)
 	if err != nil {
 		return &result, err
 	} else {
