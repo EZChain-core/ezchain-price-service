@@ -32,9 +32,9 @@ type Token struct {
 	PriceChangePercentage24H     float64     `json:"price_change_percentage_24h" bson:"price_change_percentage_24h,truncate"`
 	MarketCapChange24H           float64       `json:"market_cap_change_24h" bson:"market_cap_change_24h,truncate"`
 	MarketCapChangePercentage24H float64     `json:"market_cap_change_percentage_24h" bson:"market_cap_change_percentage_24h,truncate"`
-	CirculatingSupply            float64         `json:"circulating_supply" bson:"circulating_supply"`
-	TotalSupply                  float64         `json:"total_supply" bson:"total_supply"`
-	MaxSupply                    float64         `json:"max_supply" bson:"max_supply"`
+	CirculatingSupply            float64         `json:"circulating_supply" bson:"circulating_supply, omitempty"`
+	TotalSupply                  float64         `json:"total_supply" bson:"total_supply, omitempty"`
+	MaxSupply                    float64         `json:"max_supply" bson:"max_supply, omitempty"`
 	ATH                          float64         `json:"ath" bson:"ath"`
 	ATHChangePercentage          float64     `json:"ath_change_percentage" bson:"ath_change_percentage,truncate"`
 	ATHDate                      time.Time   `json:"ath_date" bson:"ath_date"`

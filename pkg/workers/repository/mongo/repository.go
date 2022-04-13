@@ -84,8 +84,13 @@ func (m *ServiceMongoStorage) Upsert(tokens *geckoTypes.CoinsMarket) (*bool, err
 			tokenUpdate.PriceChangePercentage24H = item.PriceChangePercentage24h
 			tokenUpdate.MarketCapChange24H = item.MarketCapChange24h
 			tokenUpdate.MarketCapChangePercentage24H = item.MarketCapChangePercentage24h
-			tokenUpdate.CirculatingSupply = item.CirculatingSupply
-			tokenUpdate.TotalSupply = item.TotalSupply
+			if(item.ID == "ezchain" && item.Symbol == "ezc") {
+				tokenUpdate.CirculatingSupply = tokenUpdate.CirculatingSupply
+				tokenUpdate.TotalSupply = tokenUpdate.TotalSupply
+			} else {
+				tokenUpdate.CirculatingSupply = item.CirculatingSupply
+				tokenUpdate.TotalSupply = item.TotalSupply
+			}
 			tokenUpdate.ATH = item.ATH
 			tokenUpdate.ATHChangePercentage = item.ATHChangePercentage
 			tokenUpdate.ROI = item.ROI
