@@ -51,5 +51,6 @@ type Validator struct {
 	mgm.DefaultModel `bson:",inline"`
 	NodeID           string    `json:"node_id" bson:"node_id"`
 	Name             string    `json:"name" bson:"name"`
+	LogoURL          string    `json:"logo_url" bson:"logo_url"`
 	LastUpdated      time.Time `json:"last_updated" bson:"last_updated"`
 }
