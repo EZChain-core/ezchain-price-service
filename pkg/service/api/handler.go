@@ -2,6 +2,7 @@ package api
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 
@@ -254,12 +255,13 @@ func (s *ServiceHandler) GetEZCSupplies(c *gin.Context) {
 		return
 	}
 
+	vesting, _ := strconv.ParseFloat(result.Vesting, 64)
 	response := &Response{
 		Success: true,
 		Message: "Get EZC supply successfully!",
 		ErrorCode: 0,
 		Data: &SupplyDataResponse{
-			result.CirculatingSupply,
+			result.CirculatingSupply + vesting,
 			result.TotalSupply,
 			result.MaxSupply,
 		},

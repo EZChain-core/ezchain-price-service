@@ -47,6 +47,16 @@ services:
       LBANK_SECRET_KEY: ${LBANK_SECRET_KEY}
     volumes:
       - ./.env:/etc/price-service/.env:ro
+  worker_vesting:
+    restart: always
+    container_name: worker_vesting
+    build:
+      context: .
+      dockerfile: ./others/vesting_worker/Dockerfile
+    environment:
+      MONGO_URI: ${MONGO_URI}
+    volumes:
+      - ./.env:/usr/src/app/.env:ro
 #  mongodb:
 #    image: mongo:5.0
 #    ports:
