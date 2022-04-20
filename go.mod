@@ -11,6 +11,7 @@ require (
 	github.com/enixdark/featurehub v0.0.0-20210601042123-807bbef0be48 // indirect
 	github.com/enixdark/featurehub/sdks/client-go v0.0.0-20210601042123-807bbef0be48
 	github.com/enixdark/go-gecko v1.0.1
+	github.com/ethereum/go-ethereum v1.10.17
 	github.com/fatih/structs v1.1.0
 	github.com/gertd/go-pluralize v0.1.7
 	github.com/getsentry/sentry-go v0.9.0 // indirect
@@ -23,8 +24,10 @@ require (
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-querystring v1.0.0
+	github.com/google/uuid v1.2.0
 	github.com/google/wire v0.4.0 // indirect
 	github.com/gopherjs/gopherjs v0.0.0-20190309154008-847fc94819f9 // indirect
+	github.com/gorilla/websocket v1.4.2
 	github.com/iromli/go-itsdangerous v0.0.0-20190903235033-828af6836b4f
 	github.com/joho/godotenv v1.3.0
 	github.com/json-iterator/go v1.1.12
@@ -37,6 +40,7 @@ require (
 	github.com/prometheus/procfs v0.0.5 // indirect
 	github.com/rs/cors v1.7.0
 	github.com/sethvargo/go-password v0.2.0 // indirect
+	github.com/shopspring/decimal v0.0.0-20191130220710-360f2bc03045
 	github.com/siddontang/go-mysql v0.0.0-20200622032841-a8c16ae9a9cb // indirect
 	github.com/sirupsen/logrus v1.8.0
 	github.com/smartystreets/assertions v0.0.0-20190215210624-980c5ac6f3ac // indirect
@@ -48,8 +52,10 @@ require (
 	github.com/swaggo/gin-swagger v1.3.2
 	github.com/swaggo/swag v1.6.7
 	github.com/ugorji/go v1.2.7 // indirect
+	github.com/umbracle/ethgo v0.1.0 // indirect
 	github.com/urfave/cli v1.22.5
 	github.com/urfave/cli/v2 v2.4.0 // indirect
+	github.com/valyala/fastjson v1.6.3 // indirect
 	go.elastic.co/apm v1.11.0 // indirect
 	go.elastic.co/apm/module/apmgin v1.11.0
 	go.elastic.co/apm/module/apmgoredisv8 v1.11.0
@@ -58,21 +64,16 @@ require (
 	go.mongodb.org/mongo-driver v1.7.0
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.21.0
-	golang.org/x/crypto v0.0.0-20220315160706-3147a52a75dd // indirect
+	golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4 // indirect
 	golang.org/x/lint v0.0.0-20201208152925-83fdc39ff7b5 // indirect
 	golang.org/x/net v0.0.0-20220225172249-27dd8689420f // indirect
-	golang.org/x/sys v0.0.0-20220315194320-039c03cc5b86 // indirect
+	golang.org/x/sys v0.0.0-20220412211240-33da011f77ad // indirect
 	golang.org/x/tools v0.1.10 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
-	honnef.co/go/tools v0.0.1-2020.1.4 // indirect
-	github.com/google/uuid v1.1.1
-    github.com/gorilla/websocket v1.4.1
-    github.com/shopspring/decimal v0.0.0-20191130220710-360f2bc03045
 )
 
 module github.com/EZChain-core/price-service
-

@@ -45,6 +45,7 @@ type Token struct {
 	AtlDate                      time.Time   `json:"atl_date" bson:"atl_date"`
 	Roi                          interface{} `json:"roi" bson:"roi"`
 	LastUpdated                  time.Time   `json:"last_updated" bson:"last_updated"`
+	Vesting                      string     `json:"vesting" bson:"vesting"`
 }
 
 type Validator struct {

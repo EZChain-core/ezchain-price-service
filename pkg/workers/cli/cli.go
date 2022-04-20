@@ -22,10 +22,13 @@ import (
 	"github.com/EZChain-core/price-service/config"
 	"github.com/EZChain-core/price-service/pkg/workers/usecase"
 	"github.com/EZChain-core/price-service/pkg/workers/repository/mongo"
+	//"github.com/EZChain-core/price-service/pkg/utils/abi"
 	//"github.com/EZChain-core/price-service/pkg/utils/lbank/module"
 	//"github.com/EZChain-core/price-service/pkg/utils/lbank/constant"
 	gecko "github.com/enixdark/go-gecko/v3"
 	geckoTypes "github.com/enixdark/go-gecko/v3/types"
+	//"github.com/ethereum/go-ethereum/ethclient"
+	//"github.com/ethereum/go-ethereum/common"
 
 )
 
@@ -113,7 +116,55 @@ func main() {
 			fmt.Println("You need more parameters")
 			return nil
 		},
+
+
+
 		Commands: []cli.Command{
+			//{
+			//	Name:  "vesting",
+			//	Usage: "run vesting contract address token in background",
+			//	Action: func(c *cli.Context) error {
+			//		fmt.Println("Processing  for vesting ezc tokens")
+			//
+			//		conn, err := ethclient.Dial("https://api.ezchain.com/ext/bc/C/rpc")
+			//		if err != nil {
+			//			log.Fatalf("Failed to connect to the Ethereum client: %v", err)
+			//		}
+			//
+			//		// Instantiate the contract and display its name
+			//		address := common.HexToAddress("0x05E4dfbB6f26E568D846C95C0C716C4338fd1C0A")
+			//		SM, err := abi.NewAbi(address, conn)
+			//		if err != nil {
+			//			log.Fatalf("Failed to instantiate a smart contract contract: %v", err)
+			//		}
+			//
+			//		totalVesting, err := SM.GetVestingSchedulesCount(nil)
+			//		if err != nil {
+			//			log.Fatalf("Failed to call smart contract : %v", err)
+			//		}
+			//		fmt.Println(totalVesting)
+			//
+			//		var VestingList struct {
+			//			Index int
+			//			VestingResult interface{}
+			//		}
+			//
+			//		for i := 0; i < totalVesting; i++ {
+			//			data, err := SM.GetVestingIdAtIndex(nil, i)
+			//			if err != nil {
+			//				log.Fatalf("Failed to call smart contract : %v", err)
+			//			}
+			//
+			//			.then(result => { resolve({ index: i, vestingID: result }) });
+			//		}
+			//
+			//		for (const id of vestingIDs) {
+			//			contract.getVestingIdAtIndex(i).then(result => { resolve({ index: i, vestingID: result }) });
+			//		}
+			//
+			//		return nil
+			//	},
+			//},
 			{
 				Name:  "wpool",
 				Usage: "run robust worker pool in background",
