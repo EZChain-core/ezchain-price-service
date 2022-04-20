@@ -15,6 +15,6 @@ RUN yarn install
 # RUN npm ci --only=production
 
 # Bundle app source
-COPY ./others/vesting_worker/* .
+COPY ./others/vesting_worker/ .
 
 CMD [ "yarn", "run", "worker" ]
