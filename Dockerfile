@@ -8,7 +8,7 @@ from build_base AS build_go
 
 ENV GO111MODULE=on
 
-WORKDIR $GOPATH/src/git.paas.vn/iam/gray_titanic
+WORKDIR $GOPATH/src/github.com/EZChain-core/price-service
 COPY go.mod .
 COPY go.sum .
 RUN go mod download
