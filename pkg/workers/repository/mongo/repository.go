@@ -43,7 +43,7 @@ func (m *ServiceMongoStorage) Upsert(tokens *geckoTypes.CoinsMarket) (*bool, err
 
 		coll := mgm.Coll(t)
 		err := coll.First(bson.M{"id": item.ID, "symbol": item.Symbol}, t)
-		if strings.ToUpper(item.Symbol) != "EZC" || strings.ToUpper(item.Symbol) != "EZCHAIN" {
+		if strings.ToUpper(item.Symbol) != "EZC" && strings.ToUpper(item.Symbol) != "EZCHAIN" {
 			if err != nil {
 				token := &Token{
 					ID:            item.ID,
