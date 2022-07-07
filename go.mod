@@ -36,6 +36,7 @@ require (
 	github.com/magefile/mage v1.11.0 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
+	github.com/miguelmota/go-coinmarketcap v0.1.8 // indirect
 	github.com/otiai10/copy v1.7.0 // indirect
 	github.com/prometheus/procfs v0.0.5 // indirect
 	github.com/rs/cors v1.7.0

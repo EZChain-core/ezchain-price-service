@@ -29,6 +29,14 @@ func (s *ServiceUseCase) Upsert(ctx context.Context, tokens *geckoTypes.CoinsMar
 	return result, nil
 }
 
+func (s *ServiceUseCase) UpsertEZC(ctx context.Context, tokens *geckoTypes.CoinsMarket, price float64) (*bool, error) {
+	result, err := s.ServiceRepo.UpsertEZC(tokens, price)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
 func (s *ServiceUseCase) Import(ctx context.Context, tokens *geckoTypes.CoinList) (*bool, error) {
 	result, err := s.ServiceRepo.Import(tokens)
 	if err != nil {

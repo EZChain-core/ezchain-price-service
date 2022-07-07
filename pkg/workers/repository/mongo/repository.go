@@ -105,6 +105,76 @@ func (m *ServiceMongoStorage) Upsert(tokens *geckoTypes.CoinsMarket) (*bool, err
 	return &result, nil
 }
 
+func (m *ServiceMongoStorage) UpsertEZC(tokens *geckoTypes.CoinsMarket, price float64) (*bool, error) {
+	result := false
+	for _, item := range *tokens {
+		t := &Token{}
+
+		coll := mgm.Coll(t)
+		err := coll.First(bson.M{"id": item.ID, "symbol": item.Symbol}, t)
+		if err != nil {
+			token := &Token{
+				ID:            item.ID,
+				Symbol:        item.Symbol,
+				Name:          item.Name,
+				Image:         item.Image,
+				CurrentPrice:  price,
+				MarketCap:     item.MarketCap,
+				MarketCapRank: item.MarketCapRank,
+				//FullyDilutedValuation = item.FullyDilutedValuation,
+				TotalVolume:                  item.TotalVolume,
+				High24H:                      item.High24,
+				Low24H:                       item.Low24,
+				PriceChange24H:               item.PriceChange24h,
+				PriceChangePercentage24H:     item.PriceChangePercentage24h,
+				MarketCapChange24H:           item.MarketCapChange24h,
+				MarketCapChangePercentage24H: item.MarketCapChangePercentage24h,
+				CirculatingSupply:            item.CirculatingSupply,
+				TotalSupply:                  item.TotalSupply,
+				//MaxSupply = item.MaxSupply
+				ATH:                 item.ATH,
+				ATHChangePercentage: item.ATHChangePercentage,
+				//ATHDate = item.ATHDate,
+				ROI: item.ROI,
+				//UpdatedAt: time.Now(),
+				//LastUpdated = item.LastUpdated,
+			}
+			mgm.Coll(token).Create(token)
+		} else {
+			tokenUpdate := t
+			tokenUpdate.CurrentPrice = item.CurrentPrice
+			tokenUpdate.UpdatedAt = time.Now()
+			tokenUpdate.CurrentPrice = price
+			tokenUpdate.MarketCap = item.MarketCap
+			tokenUpdate.MarketCapRank = item.MarketCapRank
+			tokenUpdate.TotalVolume = item.TotalVolume
+			tokenUpdate.High24H = item.High24
+			tokenUpdate.Low24H = item.Low24
+			tokenUpdate.PriceChange24H = item.PriceChange24h
+			tokenUpdate.PriceChangePercentage24H = item.PriceChangePercentage24h
+			tokenUpdate.MarketCapChange24H = item.MarketCapChange24h
+			tokenUpdate.MarketCapChangePercentage24H = item.MarketCapChangePercentage24h
+			if(item.ID == "ezchain" && item.Symbol == "ezc") {
+				tokenUpdate.CirculatingSupply = tokenUpdate.CirculatingSupply
+				tokenUpdate.TotalSupply = tokenUpdate.TotalSupply
+			} else {
+				tokenUpdate.CirculatingSupply = item.CirculatingSupply
+				tokenUpdate.TotalSupply = item.TotalSupply
+			}
+			tokenUpdate.ATH = item.ATH
+			tokenUpdate.ATHChangePercentage = item.ATHChangePercentage
+			tokenUpdate.ROI = item.ROI
+			err := mgm.Coll(tokenUpdate).Update(tokenUpdate)
+			if err != nil {
+				fmt.Println(err)
+			}
+		}
+		result = true
+	}
+
+	return &result, nil
+}
+
 func (m *ServiceMongoStorage) Import(tokens *geckoTypes.CoinList) (*bool, error) {
 	result := false
 	for _, item := range *tokens {
