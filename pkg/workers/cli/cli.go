@@ -3,25 +3,28 @@ package main
 import (
 	"bytes"
 	"io/ioutil"
+	"reflect"
+	"strconv"
+
 	//"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
-	"math/rand"
 	"math/big"
+	"math/rand"
 	"net/http"
 	"strings"
 
 	"log"
-	"time"
 	"os"
+	"time"
 	//"github.com/fatih/structs"
 	//"github.com/creasty/defaults"
 	"github.com/urfave/cli"
 	//"github.com/EZChain-core/price-service/logger"
 	"github.com/EZChain-core/price-service/config"
-	"github.com/EZChain-core/price-service/pkg/workers/usecase"
 	"github.com/EZChain-core/price-service/pkg/workers/repository/mongo"
+	"github.com/EZChain-core/price-service/pkg/workers/usecase"
 	//"github.com/EZChain-core/price-service/pkg/utils/abi"
 	//"github.com/EZChain-core/price-service/pkg/utils/lbank/module"
 	//"github.com/EZChain-core/price-service/pkg/utils/lbank/constant"
@@ -86,6 +89,26 @@ type ValidatorResponse struct {
 	ID int `json:"id"`
 }
 
+type CoinmarketCapReponse struct {
+	Data   Data   `json:"data,omitempty"`
+	Status Status `json:"status,omitempty"`
+}
+
+type PointObject struct {
+	V []float64 `json:"v,omitempty"`
+}
+
+type Data struct {
+	Points map[string]PointObject `json:"points,omitempty"`
+}
+
+type Status struct {
+	Timestamp    time.Time `json:"timestamp,omitempty"`
+	ErrorCode    string    `json:"error_code,omitempty"`
+	ErrorMessage string    `json:"error_message,omitempty"`
+	Elapsed      string    `json:"elapsed,omitempty"`
+	CreditCount  int       `json:"credit_count,omitempty"`
+}
 
 func hexaNumberToInteger(hexaString string) string {
 	// replace 0x or 0X with empty String
@@ -116,8 +139,6 @@ func main() {
 			fmt.Println("You need more parameters")
 			return nil
 		},
-
-
 
 		Commands: []cli.Command{
 			//{
@@ -177,7 +198,7 @@ func main() {
 						sparkline := false
 						for {
 							time.Sleep(time.Duration(rand.Intn(5)) * time.Second)
-							for i:= 1; i < 5; i++ {
+							for i := 1; i < 5; i++ {
 								task := NewTask(func(data interface{}) error {
 									taskID := data.(int)
 									cids := []string{}
@@ -186,7 +207,7 @@ func main() {
 									order := geckoTypes.OrderTypeObject.MarketCapDesc
 									market, _ := cg.CoinsMarket(vsCurrency, cids, order, perPage, page, sparkline, priceChangePercentage)
 									serviceUseCase.Upsert(context, market)
-									if (page >= 53) {
+									if page >= 53 {
 										page = 1
 									} else {
 										page += 1
@@ -224,14 +245,6 @@ func main() {
 					fmt.Println("Processing fetch lbank")
 					//client := module.NewLbankClientWithKey(appConfig.LBankApiKey, appConfig.LBankSecretKey)
 					for {
-						//res, _ := client.LatestPrice("ezc_usdt")
-						//result, _ := json.Marshal(res)
-						//data := constant.LastPrice{}
-						//json.Unmarshal([]byte(string(result)), &data)
-						//fmt.Println(data)
-						//fmt.Println("-----------------------------------------------------")
-						////serviceUseCase.ImportLBankEZC(context, &data)
-
 						cg := gecko.NewClient(nil)
 						// find specific coins
 						vsCurrency := "usd"
@@ -243,8 +256,51 @@ func main() {
 						priceChangePercentage := []string{pcp.PCP1h, pcp.PCP24h, pcp.PCP7d, pcp.PCP14d, pcp.PCP30d, pcp.PCP200d, pcp.PCP1y}
 						order := geckoTypes.OrderTypeObject.MarketCapDesc
 						market, _ := cg.CoinsMarket(vsCurrency, ids, order, perPage, page, sparkline, priceChangePercentage)
-						serviceUseCase.Upsert(context, market)
-						fmt.Printf("Task %d processed\n", market)
+						coinmarketCapReponse := CoinmarketCapReponse{}
+						url := "https://api.coinmarketcap.com/data-api/v3/cryptocurrency/detail/chart?id=19455&range=1D"
+						method := "GET"
+
+						payload := strings.NewReader(``)
+
+						client := &http.Client {
+						}
+						req, err := http.NewRequest(method, url, payload)
+
+						if err != nil {
+							log.Fatal(err)
+						}
+						res, err := client.Do(req)
+						if err != nil {
+							log.Fatal(err)
+						}
+						defer res.Body.Close()
+
+						body, err := ioutil.ReadAll(res.Body)
+						if err != nil {
+							log.Fatal(err)
+						}
+						//fmt.Println(string(body))
+
+						if err := json.Unmarshal(body, &coinmarketCapReponse); err != nil {
+							log.Fatal(err)
+						}
+						keys := reflect.ValueOf(coinmarketCapReponse.Data.Points).MapKeys()
+						//sort.SliceStable(keys, func(i, j int) bool {
+						//	return keys[i] > keys[j]
+						//})
+						max := 0
+						key := ""
+						for _, i := range keys {
+							m, _ := strconv.Atoi(i.String())
+							if max < m {
+								max = m
+								key = i.String()
+							}
+						}
+						price := coinmarketCapReponse.Data.Points[key].V[0]
+
+						serviceUseCase.UpsertEZC(context, market, price)
+						fmt.Printf("Task %d processed %s\n", market, price)
 						time.Sleep(time.Duration(appConfig.LBankIntervalTime) * time.Second)
 					}
 					return nil
@@ -259,7 +315,7 @@ func main() {
 						// get balance for circult
 						payload := map[string]interface{}{
 							"jsonrpc": "2.0",
-							"method": "eth_getBalance",
+							"method":  "eth_getBalance",
 							"params": []string{
 								"0x8d38762C9B2Ea11BFE198972ED0e173E89cE149b",
 								"latest",
@@ -356,7 +412,6 @@ func main() {
 
 						defer respSupply.Body.Close()
 
-
 						// get payload validator
 						payloadValidator := strings.NewReader(`{
 								"jsonrpc": "2.0",
@@ -391,7 +446,7 @@ func main() {
 						for _, validator := range dataCValidator.Result.Validators {
 							temp, _ := new(big.Int).SetString(validator.PotentialReward, 10)
 							temp = temp.Mul(temp, big.NewInt(1000000000))
-							if(len(validator.Delegators) > 0) {
+							if len(validator.Delegators) > 0 {
 								for _, delegator := range validator.Delegators {
 									tempDelagator, _ := new(big.Int).SetString(delegator.PotentialReward, 10)
 									tempDelagator = tempDelagator.Mul(tempDelagator, big.NewInt(1000000000))
@@ -404,7 +459,7 @@ func main() {
 						CSupply, _ := new(big.Int).SetString(hexaNumberToInteger(dataCBalance.Result), 16)
 						totalSupply := currentSupply.Sub(currentSupply, totalValidatorBalance)
 						totalSupply = totalSupply.Add(totalSupply, CSupply)
-						if(totalSupply.Cmp(big.NewInt(1).Mul(big.NewInt(500000000), big.NewInt(1000000000000000000))) > 0) {
+						if totalSupply.Cmp(big.NewInt(1).Mul(big.NewInt(500000000), big.NewInt(1000000000000000000))) > 0 {
 							totalSupply = big.NewInt(1).Mul(big.NewInt(500000000), big.NewInt(1000000000000000000))
 						}
 						maxSupply := new(big.Int).SetInt64(0)
